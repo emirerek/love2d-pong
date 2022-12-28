@@ -16,6 +16,7 @@ function love.load()
 
     love.window.setMode(WINDOW_WIDTH, WINDOW_HEIGHT, CONFIG)
     love.window.setTitle("Pong")
+    love.graphics.setNewFont(70)
 
     game = Game:new()
     leftPaddle = Paddle:create(20, WINDOW_HEIGHT / 2 - 50, 20, 100)
@@ -108,7 +109,6 @@ end
 
 function love.draw()
 
-    love.graphics.setNewFont(70)
     love.graphics.print(love.timer.getFPS(), 20, 20)
     
     game:renderScores(WINDOW_WIDTH, WINDOW_HEIGHT)

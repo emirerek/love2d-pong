@@ -48,7 +48,7 @@ function love.update(dt)
         if wall == "right" then
 
             game:incrementPlayerOne()
-            game:toggleTurn()
+            game:toggleTurn() --change ball direction
             ball:reset(game.turn)
 
         elseif wall == "left" then
@@ -103,8 +103,6 @@ function love.update(dt)
 end
 
 function love.draw()
-
-    love.graphics.print(love.timer.getFPS(), 20, 20)
     
     if game.isRunning then
 

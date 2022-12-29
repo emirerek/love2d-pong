@@ -10,7 +10,7 @@ function Ball:create(width)
         x = 0,
         y = 0,
         width = width,
-        heigth = width,
+        height = width,
         speed = 500,
         dirX = 1,
         dirY = 1
@@ -22,21 +22,21 @@ function Ball:create(width)
 
 end
 
-function Ball:reset(windowWidth, windowHeigth, dirX)
+function Ball:reset(dirX)
 
     local randY = math.random(0, 1) --random start direction for the ball
 
     if randY == 0 then
 
-        self.y = windowHeigth / 10 - self.heigth / 2
+        self.y = WINDOW_HEIGHT / 10 - self.height / 2
 
     else
 
-        self.y = (windowHeigth - windowHeigth / 10) - self.heigth / 2
+        self.y = (WINDOW_HEIGHT - WINDOW_HEIGHT / 10) - self.height / 2
 
     end
 
-    self.x = windowWidth / 2 - self.width / 2
+    self.x = WINDOW_WIDTH / 2 - self.width / 2
 
     if dirX ~= nil then 
 
@@ -69,11 +69,11 @@ function Ball:checkCollision(paddle)
 
     if self.x + self.width > paddle.x
     
-    and self.y + self.heigth > paddle.y
+    and self.y + self.height > paddle.y
 
     and paddle.x + paddle.width > self.x
 
-    and paddle.y + paddle.heigth > self.y then
+    and paddle.y + paddle.height > self.y then
     
         return true
 
@@ -97,7 +97,7 @@ function Ball:checkOffScreen()
 
         return "top"
 
-    elseif self.y + self.heigth > love.graphics.getHeight() then
+    elseif self.y + self.height > love.graphics.getHeight() then
 
         return "bottom"
 
@@ -109,6 +109,6 @@ end
 
 function Ball:render()
 
-    love.graphics.rectangle("fill", self.x, self.y, self.width, self.heigth)
+    love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
 
 end

@@ -9,26 +9,13 @@ function Game:new()
         turn = 1,
         playerOneScore = 0,
         playerTwoScore = 0,
+        isRunning = false,
         winner = nil
     
     }
     
     setmetatable(newGame, Game)
     return newGame
-
-end
-
-function Game:run()
-
-    if self.isRunning == false then
-
-        self.isRunning = true
-    
-    else
-
-        self.isRunning = false
-
-    end
 
 end
 
@@ -68,41 +55,70 @@ function Game:incrementPlayerTwo()
 
 end
 
-function Game:checkStatus()
+function Game:decideWinner() 
 
-    if self.playerOneScore == 5 or self.playerTwoScore == 5 then
+    if self.playerOneScore > self.playerTwoScore then
 
-        if self.playerOneScore > self.playerTwoScore then
+        self.winner = 0
 
-            self.winner = 0
+    elseif self.playerTwoScore > self.playerOneScore then
 
-        elseif self.playerTwoScore < self.playerOneScore then
-
-            self.winner = 1
-
-        end
+        self.winner = 1
 
     end
 
 end
 
-function Game:renderScores(windowWidth, windowHeigth)
+function Game:didEnd()
 
-    love.graphics.print(self.playerOneScore, windowWidth / 2 - windowWidth / 4, windowHeigth / 10)
-    love.graphics.print(self.playerTwoScore, windowWidth / 2 + windowWidth / 4, windowHeigth / 10)
+    if self.playerOneScore == 5 or self.playerTwoScore == 5 then
+        
+        return true
+
+    end
+
+    return false
 
 end
 
-function Game:renderWinner(windowWidth, windowHeigth)
+function Game:renderLines() 
+
+    love.graphics.setLineWidth(8)
+    local lineHeight = 18
+    local lineGap = 36
+    local middle = WINDOW_WIDTH / 2 - 4
+
+    for i = -9, WINDOW_HEIGHT, lineGap do
+
+        love.graphics.line(middle, i, middle, i + lineHeight)
+
+    end
+
+end
+
+function Game:renderScores()
+
+    love.graphics.print(self.playerOneScore, WINDOW_WIDTH / 2 - WINDOW_WIDTH / 4, WINDOW_HEIGHT / 10)
+    love.graphics.print(self.playerTwoScore, WINDOW_WIDTH / 2 + WINDOW_WIDTH / 4, WINDOW_HEIGHT / 10)
+
+end
+
+function Game:renderWinner()
+
+    local winner, message
 
     if self.winner == 0 then
 
-        love.graphics.print("Player 1 won!", windowWidth / 2, windowHeigth / 10)
+        winner = "Player One"
 
-    else
+    else 
 
-        love.graphics.print("Player 2 won!", windowWidth / 2, windowHeigth / 10)
+        winner = "Player Two"
 
     end
+
+    message = winner .. " has won the game!"
+
+    love.graphics.print(message, 120, 200)
 
 end

@@ -16,20 +16,32 @@ function love.load()
 
     love.window.setMode(WINDOW_WIDTH, WINDOW_HEIGHT, CONFIG)
     love.window.setTitle("Pong")
+
     love.graphics.setNewFont(70)
 
     game = Game:new()
-    leftPaddle = Paddle:create(20, WINDOW_HEIGHT / 2 - 50, 20, 100)
-    rightPaddle = Paddle:create(WINDOW_WIDTH - 40, WINDOW_HEIGHT / 2 - 50, 20, 100)
+    leftPaddle = Paddle:create(20, WINDOW_HEIGHT / 2 - 50, 20, 100, "w", "s")
+    rightPaddle = Paddle:create(WINDOW_WIDTH - 40, WINDOW_HEIGHT / 2 - 50, 20, 100, "up", "down")
     ball = Ball:create(16)
 
-    ball:reset(WINDOW_WIDTH, WINDOW_HEIGHT)
+    ball:reset()
 
 end
 
 function love.update(dt)
 
-    if (game.isRunning) then
+    if game.isRunning == false then
+
+        if love.keyboard.isDown("return") then
+
+            game:reset()
+            game.isRunning = true
+    
+        end
+
+    elseif game.isRunning == true then
+
+        --wall collision
         
         local wall = ball:checkOffScreen()
 
@@ -37,13 +49,13 @@ function love.update(dt)
 
             game:incrementPlayerOne()
             game:toggleTurn()
-            ball:reset(WINDOW_WIDTH, WINDOW_HEIGHT, game.turn)
+            ball:reset(game.turn)
 
         elseif wall == "left" then
 
             game:incrementPlayerTwo()
             game:toggleTurn()
-            ball:reset(WINDOW_WIDTH, WINDOW_HEIGHT, game.turn)
+            ball:reset(game.turn)
 
         elseif wall == "top" then
         
@@ -53,14 +65,16 @@ function love.update(dt)
         elseif wall == "bottom" then
 
             ball:toggleDirY()
-            ball.y = love.graphics.getHeight() - ball.heigth --fix collision overlap issue
+            ball.y = love.graphics.getHeight() - ball.height
 
         end
+
+        --paddle collision
 
         if ball:checkCollision(leftPaddle) then
 
             ball:toggleDirX()
-            ball.x = leftPaddle.x + leftPaddle.width
+            ball.x = leftPaddle.x + leftPaddle.width --fix collision overlap issue
 
         elseif ball:checkCollision(rightPaddle) then 
 
@@ -69,38 +83,19 @@ function love.update(dt)
 
         end
 
-        if love.keyboard.isDown("w") then
-
-            leftPaddle:moveUp(dt)
-    
-        end
-    
-        if love.keyboard.isDown("s") then
-    
-            leftPaddle:moveDown(dt)
-    
-        end
-    
-        if love.keyboard.isDown("up") then
-    
-            rightPaddle:moveUp(dt)
-    
-        end
-    
-        if love.keyboard.isDown("down") then
-    
-            rightPaddle:moveDown(dt)
-    
-        end
+        --movement
 
         ball:move(dt)
+        leftPaddle:move(dt)
+        rightPaddle:move(dt)
 
-    else
+        --game status
 
-        if love.keyboard.isDown("return") then
+        if game:didEnd() then
 
-            game:run()
-    
+            game:decideWinner()
+            game.isRunning = false
+
         end
 
     end
@@ -111,21 +106,29 @@ function love.draw()
 
     love.graphics.print(love.timer.getFPS(), 20, 20)
     
-    game:renderScores(WINDOW_WIDTH, WINDOW_HEIGHT)
-    leftPaddle:render()
-    rightPaddle:render()
-    
-    if (game.isRunning) then
+    if game.isRunning then
+
+        game:renderScores()
+        game:renderLines()
 
         ball:render()
 
+        leftPaddle:render()
+        rightPaddle:render()
+
+    elseif game.isRunning == false then
+
+        love.graphics.clear()
+
+        if game.winner ~= nil then
+
+            game:renderWinner()
+
+        end
+
+        love.graphics.print("Press Enter to start the game.", 120, 300)
+
     end
-
-    --if (game.winner ~= nil) then
-
-        --game:renderWinner(WINDOW_WIDTH, WINDOW_HEIGHT)
-
-    --end
 
 end
 

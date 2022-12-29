@@ -18,13 +18,12 @@ function love.load()
     love.window.setTitle("Pong")
 
     love.graphics.setNewFont(70)
+    font = love.graphics.getFont()
 
     game = Game:new()
     leftPaddle = Paddle:create(20, WINDOW_HEIGHT / 2 - 50, 20, 100, "w", "s")
     rightPaddle = Paddle:create(WINDOW_WIDTH - 40, WINDOW_HEIGHT / 2 - 50, 20, 100, "up", "down")
     ball = Ball:create(16)
-
-    ball:reset()
 
 end
 
@@ -35,11 +34,14 @@ function love.update(dt)
         if love.keyboard.isDown("return") then
 
             game:reset()
+            ball:reset()
+            rightPaddle:setPosition(WINDOW_WIDTH - 40, WINDOW_HEIGHT / 2 - 50)
+            leftPaddle:setPosition(20, WINDOW_HEIGHT / 2 - 50)
             game.isRunning = true
     
         end
 
-    elseif game.isRunning == true then
+    elseif game.isRunning then
 
         --wall collision
         
@@ -76,7 +78,7 @@ function love.update(dt)
             ball:toggleDirX()
             ball.x = leftPaddle.x + leftPaddle.width --fix collision overlap issue
 
-        elseif ball:checkCollision(rightPaddle) then 
+        elseif ball:checkCollision(rightPaddle) then
 
             ball:toggleDirX()
             ball.x = rightPaddle.x - ball.width
@@ -117,14 +119,7 @@ function love.draw()
     elseif game.isRunning == false then
 
         love.graphics.clear()
-
-        if game.winner ~= nil then
-
-            game:renderWinner()
-
-        end
-
-        love.graphics.print("Press Enter to start the game.", 120, 300)
+        game:renderMenu()
 
     end
 

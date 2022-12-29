@@ -1,5 +1,3 @@
-math.randomseed(os.time())
-
 Ball = {}
 Ball.__index = Ball
 

@@ -31,15 +31,7 @@ end
 
 function Game:toggleTurn() 
 
-    if self.turn == -1 then
-
-        self.turn = 1
-    
-    else
-
-        self.turn = -1
-
-    end    
+    self.turn = self.turn * -1   
 
 end
 
@@ -98,14 +90,17 @@ end
 
 function Game:renderScores()
 
-    love.graphics.print(self.playerOneScore, WINDOW_WIDTH / 2 - WINDOW_WIDTH / 4, WINDOW_HEIGHT / 10)
-    love.graphics.print(self.playerTwoScore, WINDOW_WIDTH / 2 + WINDOW_WIDTH / 4, WINDOW_HEIGHT / 10)
+    local pOneWidth = font:getWidth(self.playerOneScore)
+    local pTwoWidth = font:getWidth(self.playerTwoScore)
+
+    love.graphics.print(self.playerOneScore, WINDOW_WIDTH / 2 - WINDOW_WIDTH / 4 - pOneWidth / 2, WINDOW_HEIGHT / 10)
+    love.graphics.print(self.playerTwoScore, WINDOW_WIDTH / 2 + WINDOW_WIDTH / 4 - pTwoWidth / 2, WINDOW_HEIGHT / 10)
 
 end
 
-function Game:renderWinner()
+function Game:renderMenu()
 
-    local winner, message
+    local winner, startMessage, winMessage, winLength, startLength
 
     if self.winner == 0 then
 
@@ -117,8 +112,17 @@ function Game:renderWinner()
 
     end
 
-    message = winner .. " has won the game!"
+    winMessage = winner .. " has won the game!"
+    startMessage = "Press Enter to start the game."
+    winLength = font:getWidth(winMessage)
+    startLength = font:getWidth(startMessage)
 
-    love.graphics.print(message, 120, 200)
+    if game.winner ~= nil then
+
+        love.graphics.print(winMessage, WINDOW_WIDTH / 2 - winLength / 2, WINDOW_HEIGHT / 2 - 140)
+
+    end
+
+    love.graphics.print(startMessage, WINDOW_WIDTH / 2 - startLength / 2, WINDOW_HEIGHT / 2 - 35)
 
 end

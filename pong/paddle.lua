@@ -20,9 +20,10 @@ function Paddle:create(x, y, width, height, upKey, downKey)
 
 end
 
-function Paddle:render()
+function Paddle:setPosition(x, y) 
 
-    love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
+    self.x = x
+    self.y = y
 
 end
 
@@ -51,5 +52,11 @@ function Paddle:move(dt)
         self:moveDown(dt)
 
     end
+
+end
+
+function Paddle:render()
+
+    love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
 
 end

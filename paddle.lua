@@ -5,13 +5,17 @@ function Paddle:create(x, y, width, height, upKey, downKey)
 
     local newPaddle = {
 
-        x = x,
-        y = y,
+        pos = {
+
+            x = x,
+            y = y
+
+        },
         width = width,
         height = height,
         upKey = upKey,
         downKey = downKey,
-        speed = 600,
+        speed = 800,
 
     }
     
@@ -20,22 +24,15 @@ function Paddle:create(x, y, width, height, upKey, downKey)
 
 end
 
-function Paddle:setPosition(x, y) 
-
-    self.x = x
-    self.y = y
-
-end
-
 function Paddle:moveUp(dt)
 
-    self.y = math.max(0, self.y - self.speed * dt)
+    self.pos.y = math.max(0, self.pos.y - self.speed * dt)
 
 end
 
 function Paddle:moveDown(dt)
 
-    self.y = math.min(love.graphics.getHeight() - self.height, self.y + self.speed * dt)
+    self.pos.y = math.min(love.graphics.getHeight() - self.height, self.pos.y + self.speed * dt)
 
 end
 
@@ -57,6 +54,6 @@ end
 
 function Paddle:render()
 
-    love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
+    love.graphics.rectangle("fill", self.pos.x, self.pos.y, self.width, self.height)
 
 end

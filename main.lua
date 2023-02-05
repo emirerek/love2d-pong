@@ -35,8 +35,10 @@ function love.update(dt)
 
             game:reset()
             ball:reset()
-            rightPaddle:setPosition(WINDOW_WIDTH - 40, WINDOW_HEIGHT / 2 - 50)
-            leftPaddle:setPosition(20, WINDOW_HEIGHT / 2 - 50)
+            rightPaddle.pos.x = WINDOW_WIDTH - 40
+            rightPaddle.pos.y = WINDOW_HEIGHT / 2 - 50
+            leftPaddle.pos.x = 20
+            leftPaddle.pos.y = WINDOW_HEIGHT / 2 - 50
             game.isRunning = true
     
         end
@@ -61,13 +63,14 @@ function love.update(dt)
 
         elseif wall == "top" then
         
-            ball:toggleDirY()
-            ball.y = 0 --fix collision overlap issue
+            ball.vel.y = -ball.vel.y
+            ball.pos.y = 0 --fix collision overlap issue
         
+            
         elseif wall == "bottom" then
 
-            ball:toggleDirY()
-            ball.y = love.graphics.getHeight() - ball.height
+            ball.vel.y = -ball.vel.y
+            ball.pos.y = love.graphics.getHeight() - ball.height
 
         end
 
@@ -75,13 +78,21 @@ function love.update(dt)
 
         if ball:checkCollision(leftPaddle) then
 
-            ball:toggleDirX()
-            ball.x = leftPaddle.x + leftPaddle.width --fix collision overlap issue
+            if ball.vel.x < 0 then --only toggle when ball is headed towards the paddle / fix collision overlap issue
+
+                ball.vel.x = -ball.vel.x
+                ball:calculateBounce(leftPaddle)
+
+            end
 
         elseif ball:checkCollision(rightPaddle) then
 
-            ball:toggleDirX()
-            ball.x = rightPaddle.x - ball.width
+            if ball.vel.x > 0 then
+
+                ball:calculateBounce(rightPaddle)
+                ball.vel.x = -ball.vel.x
+
+            end
 
         end
 
@@ -105,7 +116,7 @@ function love.update(dt)
 end
 
 function love.draw()
-    
+
     if game.isRunning then
 
         game:renderScores()

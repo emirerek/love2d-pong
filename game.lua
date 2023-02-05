@@ -5,7 +5,6 @@ function Game:new()
 
     local newGame = {
 
-        isRunning = false,
         turn = 1,
         playerOneScore = 0,
         playerTwoScore = 0,
@@ -22,7 +21,7 @@ end
 function Game:reset()
 
     self.isRunning = false
-    self.turn = 1
+    self.turn = "right"
     self.playerOneScore = 0
     self.playerTwoScore = 0
     self.winner = nil
@@ -31,7 +30,15 @@ end
 
 function Game:toggleTurn() 
 
-    self.turn = self.turn * -1   
+    if self.turn == "right" then
+
+        self.turn = "left"
+
+    else 
+
+        self.turn = "right"
+
+    end
 
 end
 

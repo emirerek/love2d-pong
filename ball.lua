@@ -14,12 +14,6 @@ function Ball:create(width)
             y = 0
     
         },
-        dir = {
-    
-            x = 1,
-            y = 1
-    
-        },
         vel = {
 
             x = 1,
@@ -63,23 +57,20 @@ function Ball:reset(turn)
 
 end
 
-function Ball:getIntersectPoint(paddle) 
+function Ball:bounce(paddle)
+
+    local intersectY
 
     if (self.pos.y < paddle.pos.y) then
 
-        return self.pos.y + self.height
+        intersectY = self.pos.y + self.height
 
     else
 
-        return self.pos.y
+        intersectY = self.pos.y
 
     end
 
-end
-
-function Ball:calculateBounce(paddle)
-
-    local intersectY = self:getIntersectPoint(paddle)
     local middlePaddle = paddle.pos.y + paddle.height / 2
     local collisionPoint = intersectY - middlePaddle --get the distance of the collision from the middle of the paddle
     local collisionPointNormalized = collisionPoint / (paddle.height / 2)

@@ -26,7 +26,7 @@ function love.load()
     ball = Ball:create(16)
 
 end
-
+ 
 function love.update(dt)
 
     if game.isRunning == false then
@@ -81,7 +81,7 @@ function love.update(dt)
             if ball.vel.x < 0 then --only toggle when ball is headed towards the paddle / fix collision overlap issue
 
                 ball.vel.x = -ball.vel.x
-                ball:calculateBounce(leftPaddle)
+                ball:bounce(leftPaddle)
 
             end
 
@@ -89,7 +89,7 @@ function love.update(dt)
 
             if ball.vel.x > 0 then
 
-                ball:calculateBounce(rightPaddle)
+                ball:bounce(rightPaddle)
                 ball.vel.x = -ball.vel.x
 
             end
